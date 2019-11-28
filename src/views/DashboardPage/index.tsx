@@ -62,7 +62,7 @@ const DashboardPage: React.FC<any> = () => {
     }
 
     const openChat = (toUser: any) => {
-        history.push(`/chat?from=${user._id}&to=${toUser._id}`);
+        history.push(`/chat?owner=${user._id}&reciever=${toUser._id}`);
     }
 
     useEffect(() => {
