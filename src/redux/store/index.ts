@@ -1,8 +1,11 @@
 import { createStore, applyMiddleware, Store } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import createSagaMiddleware, { SagaMiddleware } from 'redux-saga';
 import rootReducer from "../reducers";
+import { initSagas } from "./initSagas";
 
-const middleware: any[] = [];
+const sagaMiddleware: SagaMiddleware = createSagaMiddleware();
+const middleware: any[] = [sagaMiddleware];
 
 const getCompose = () => {
     if (process.env.NODE_ENV.trim() !== "production") {
@@ -18,6 +21,7 @@ const getStore: () => Store = () => {
         {},
         getCompose()
     );
+    initSagas(sagaMiddleware);
 
     return store;
 }
