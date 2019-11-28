@@ -3,12 +3,11 @@ import {
     USER_SIGN_UP_SUCCESS,
     USER_LOGIN_ERROR,
     USER_SIGN_UP_ERROR,
-    GET_USER_SUCCESS,
     USER_SIGN_OUT
 } from '../constants';
 
-const initialState = {
-}
+const userLocal = localStorage.getItem('user');
+const initialState = userLocal ? JSON.parse(userLocal).user : {};
 
 export default (state = initialState, action: any) => {
     const { type, payload } = action;
@@ -16,7 +15,6 @@ export default (state = initialState, action: any) => {
     switch (type) {
         case USER_LOGIN_SUCCESS:
         case USER_SIGN_UP_SUCCESS:
-        case GET_USER_SUCCESS:
             return { ...payload.user }
         case USER_LOGIN_ERROR:
         case USER_SIGN_UP_ERROR:
