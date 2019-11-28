@@ -1,7 +1,8 @@
-import React from 'react'
-import { Switch, Route } from 'react-router'
-import { Box, makeStyles, createStyles, Theme } from '@material-ui/core'
-import SingInPage from '../../views/SingInPage'
+import React from 'react';
+import { Switch, Route } from 'react-router';
+import { Box, makeStyles, createStyles, Theme } from '@material-ui/core';
+import SingInPage from '../../views/SingInPage';
+import SignUpPage from '../../views/SingupPage';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,7 +19,7 @@ const Root: React.FC = () => {
         <Box className={classes.container} alignItems='center' display='flex'>
             <Switch>
                 <Route path='/' exact component={SingInPage}/>
-                <Route path='/signup'/>
+                <Route path='/signup' component={SignUpPage}/>
             </Switch>
         </Box>
     )
