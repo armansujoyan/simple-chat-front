@@ -5,7 +5,8 @@ import {
     Typography,
     makeStyles,
     createStyles,
-    Theme
+    Theme,
+    Button
 } from '@material-ui/core';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     text: {
       marginTop: '2rem'
+    },
+    link: {
+        marginLeft: '0.5rem'
     }
   }),
 );
@@ -58,7 +62,10 @@ const SingInPage: React.FC = () => {
                     validationSchema={signupValidationSchema}
                     onSubmit={handleSubmit}/>
                 <Typography align='center' className={classes.text}>
-                    Already have an account? <Link to='/'>Sign In</Link>
+                    Already have an account?
+                    <Button to='/' component={Link} color='primary' className={classes.link}>
+                        Sign In
+                    </Button>
                 </Typography>
             </Box>
         </Container>

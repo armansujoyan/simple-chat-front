@@ -5,15 +5,15 @@ import {
     Typography,
     makeStyles,
     createStyles,
+    Button,
     Theme
 } from '@material-ui/core';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 
 import SingInForm from './SignInForm';
-import { userSelector } from '../../redux/selectors';
 import { SignInAction } from '../../redux/actions';
 
 const signInValidationSchema = yup.object({
@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     text: {
       marginTop: '2rem'
+    },
+    link: {
+        marginLeft: '0.5rem'
     }
   }),
 );
@@ -56,7 +59,10 @@ const SingInPage: React.FC = () => {
                     validationSchema={signInValidationSchema}
                     onSubmit={handleSubmit}/>
                 <Typography align='center' className={classes.text}>
-                    Don't have an account yet? <Link to='/signup'>Sign Up</Link>
+                    Don't have an account yet?
+                    <Button to='/signup' component={Link} color='primary' className={classes.link}>
+                        Sign Up
+                    </Button>
                 </Typography>
             </Box>
         </Container>
