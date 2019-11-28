@@ -2,7 +2,9 @@ import {
     USER_LOGIN_REQUEST,
     USER_SIGN_UP_REQUEST,
     USER_SIGN_OUT,
-    GET_ACTIVE_USERS_REQUEST
+    GET_ACTIVE_USERS_REQUEST,
+    USER_DISONNECTED,
+    NEW_USER_JOIN
 } from '../constants'
 import { AuthData, SignUpData } from '../../interfaces'
 
@@ -23,4 +25,16 @@ export const SignOutAction = () => ({
 export const GetActiveUsers = () => ({
     type: GET_ACTIVE_USERS_REQUEST
 })
+
+export const UserJoinAction = (payload: any) => ({
+    type: NEW_USER_JOIN,
+    payload
+})
+
+export const UserDisconnectedAction = (payload: string) => ({
+    type: USER_DISONNECTED,
+    payload
+})
+
+
 

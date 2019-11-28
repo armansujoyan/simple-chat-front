@@ -28,7 +28,7 @@ export function* userLoginSaga(action: AnyAction) {
             yield put({ type: USER_LOGIN_ERROR, payload: response.message });
         } else {
             localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response));
+            localStorage.setItem('user', JSON.stringify(response.user));
             yield put({ type: USER_LOGIN_SUCCESS, payload: response });
             history.push('dashboard');
         }
@@ -54,7 +54,7 @@ export function* userSignUpSaga(action: AnyAction) {
             yield put({ type: USER_SIGN_UP_ERROR, payload: response.message });
         } else {
             localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response));
+            localStorage.setItem('user', JSON.stringify(response.user));
             yield put({ type: USER_SIGN_UP_SUCCESS, payload: response });
             history.push('dashboard');
         }
@@ -74,12 +74,21 @@ export function* getActiveUsers(action: AnyAction) {
 
         const response = yield getActiveUsersReq.json()
 
+        const serializedUsers = response.users.map((user: any) => ({
+            _id: user.userId._id,
+            email: user.userId.email,
+            username: user.userId.username
+          }));
+
+        console.log(serializedUsers);
+
         if(response.status && response.status === 'error') {
             yield put({ type: GET_ACTIVE_USERS_ERROR, error: response.error});
         } else {
-            yield put({ type: GET_ACTIVE_USERS_SUCCESS, payload: response.users });
+            yield put({ type: GET_ACTIVE_USERS_SUCCESS, payload: serializedUsers });
         }
     } catch (error) {
+        console.log(error);
         yield put({ type: GET_ACTIVE_USERS_ERROR, payload: error.message });
     }
 }

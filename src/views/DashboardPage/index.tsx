@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import IO from 'socket.io-client';
 import {
     Box,
     List,
@@ -10,8 +11,9 @@ import {
     Theme,
     Button
 } from '@material-ui/core'
+import { SocketUrl } from '../../config';
 import { userSelector, activeUsersSelector } from '../../redux/selectors';
-import { SignOutAction, GetActiveUsers } from '../../redux/actions';
+import { SignOutAction, GetActiveUsers, UserJoinAction, UserDisconnectedAction } from '../../redux/actions';
 import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,6 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+let socket: any;
+
 const DashboardPage: React.FC<any> = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -52,6 +56,8 @@ const DashboardPage: React.FC<any> = () => {
 
     const signOut = (event: any) => {
         dispatch(SignOutAction());
+        dispatch(UserDisconnectedAction(user._id));
+        socket.emit('DISCONNECT_USER', user._id);
         localStorage.removeItem('token');
         history.push('/login');
     }
@@ -59,6 +65,20 @@ const DashboardPage: React.FC<any> = () => {
     useEffect(() => {
         dispatch(GetActiveUsers());
     }, [dispatch])
+
+    useEffect(() => {
+        socket = IO.connect(SocketUrl, { query: { token: localStorage.getItem('token') }});
+
+        socket.emit('NEW_USER_CONNECTION', user._id);
+
+        socket.on('NEW_USER_JOINED', (user: any) => {
+            dispatch(UserJoinAction(user));
+        });
+
+        socket.on('USER_DISCONNECTED', (userId: string) => {
+            dispatch(UserDisconnectedAction(userId));
+        })
+    }, [dispatch, user._id])
 
     return (
         <Box className={classes.wrapper} component='div' display='flex' flexDirection='column'>
@@ -82,7 +102,8 @@ const DashboardPage: React.FC<any> = () => {
                             </ListItem> :
                             activeUsers.map((user: any) => <ListItem
                                 className={classes.listItem}
-                                key={user._id}>
+                                key={user._id}
+                                button>
                                     {user.username}
                             </ListItem>)
                     }

@@ -7,7 +7,7 @@ import {
 } from '../constants';
 
 const userLocal = localStorage.getItem('user');
-const initialState = userLocal ? JSON.parse(userLocal).user : {};
+const initialState = userLocal ? JSON.parse(userLocal) : {};
 
 export default (state = initialState, action: any) => {
     const { type, payload } = action;
