@@ -6,10 +6,11 @@ import {
     createStyles,
     makeStyles,
     Typography,
+    ListItem,
     Theme,
     Button
 } from '@material-ui/core'
-import { userSelector } from '../../redux/selectors';
+import { userSelector, activeUsersSelector } from '../../redux/selectors';
 import { SignOutAction, GetActiveUsers } from '../../redux/actions';
 import { useHistory } from 'react-router';
 
@@ -27,6 +28,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     signOut: {
         height: '100%'
+    },
+    list: {
+        padding: 0,
+        overflowY: 'auto'
+    },
+    listItem: {
+        height: '5rem',
+    },
+    emptyListText: {
+        width: '100%'
     }
   }),
 );
@@ -35,6 +46,7 @@ const DashboardPage: React.FC<any> = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const activeUsers: any[] = useSelector(activeUsersSelector);
 
     const user: any = useSelector(userSelector);
 
@@ -60,7 +72,21 @@ const DashboardPage: React.FC<any> = () => {
                 </Typography>
             </Box>
             <Box flexGrow={14}>
-                <List></List>
+                <List className={classes.list}>
+                    {
+                        activeUsers.length === 0 ?
+                            <ListItem className={classes.listItem}>
+                                <Typography align='center' className={classes.emptyListText}>
+                                    There are no active usrs yet.
+                                </Typography>
+                            </ListItem> :
+                            activeUsers.map((user: any) => <ListItem
+                                className={classes.listItem}
+                                key={user._id}>
+                                    {user.username}
+                            </ListItem>)
+                    }
+                </List>
             </Box>
             <Box flexGrow={1}
                 alignItems='center'

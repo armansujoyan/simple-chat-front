@@ -6,7 +6,7 @@ export default (state = initialState, action: any) => {
     const { type, payload } = action;
     switch (type) {
     case GET_ACTIVE_USERS_SUCCESS:
-        return { ...state, ...payload }
+        return [ ...state, ...payload ]
     default:
         return state
     }
