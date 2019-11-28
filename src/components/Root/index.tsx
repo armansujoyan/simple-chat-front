@@ -4,6 +4,7 @@ import { Box, makeStyles, createStyles, Theme } from '@material-ui/core';
 import DashboardPage from '../../views/DashboardPage';
 import SignInPage from '../../views/SignInPage';
 import SignUpPage from '../../views/SingupPage';
+import ChatPage from '../../views/ChatPage';
 import PrivateRoute from '../PrivateRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,6 +27,7 @@ const Root: React.FC = () => {
                 <Route path='/signup' component={SignUpPage}/>
                 <Route path='/login' component={SignInPage}/>
                 <PrivateRoute path='/dashboard' component={DashboardPage}/>
+                <PrivateRoute path='/chat' component={ChatPage}/>
             </Switch>
         </Box>
     )

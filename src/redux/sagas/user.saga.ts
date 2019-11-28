@@ -80,15 +80,12 @@ export function* getActiveUsers(action: AnyAction) {
             username: user.userId.username
           }));
 
-        console.log(serializedUsers);
-
         if(response.status && response.status === 'error') {
             yield put({ type: GET_ACTIVE_USERS_ERROR, error: response.error});
         } else {
             yield put({ type: GET_ACTIVE_USERS_SUCCESS, payload: serializedUsers });
         }
     } catch (error) {
-        console.log(error);
         yield put({ type: GET_ACTIVE_USERS_ERROR, payload: error.message });
     }
 }

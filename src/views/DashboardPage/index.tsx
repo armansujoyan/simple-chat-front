@@ -50,8 +50,8 @@ const DashboardPage: React.FC<any> = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
-    const activeUsers: any[] = useSelector(activeUsersSelector);
 
+    const activeUsers: any[] = useSelector(activeUsersSelector);
     const user: any = useSelector(userSelector);
 
     const signOut = (event: any) => {
@@ -59,6 +59,10 @@ const DashboardPage: React.FC<any> = () => {
         socket.emit('DISCONNECT_USER', user._id);
         localStorage.removeItem('token');
         history.push('/login');
+    }
+
+    const openChat = (toUser: any) => {
+        history.push(`/chat?from=${user._id}&to=${toUser._id}`);
     }
 
     useEffect(() => {
@@ -104,6 +108,7 @@ const DashboardPage: React.FC<any> = () => {
                             </ListItem> :
                             activeUsers.map((user: any) => <ListItem
                                 className={classes.listItem}
+                                onClick={() => openChat(user)}
                                 key={user._id}
                                 button>
                                     {user.username}
