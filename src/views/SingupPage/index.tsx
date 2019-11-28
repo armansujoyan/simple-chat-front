@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Box,
     Container,
@@ -9,13 +9,14 @@ import {
     Button
 } from '@material-ui/core';
 import * as yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 
 import SignUpForm from './SignUpForm';
 import { SignUpData } from '../../interfaces';
 import { SignUpAction } from '../../redux/actions';
+import { isAuthenticated } from '../../utils/auth';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,12 +38,19 @@ const signupValidationSchema = yup.object({
 const SingInPage: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const initialValues = {
         username: '',
         email: '',
         password: ''
     }
+
+    useEffect(() => {
+        if(isAuthenticated()) {
+            history.push('/dashboard');
+        };
+    }, [history]);
 
     const handleSubmit = (formData: SignUpData) => {
         dispatch(SignUpAction(formData));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Box,
     Container,
@@ -9,12 +9,13 @@ import {
     Theme
 } from '@material-ui/core';
 import * as yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 
 import SingInForm from './SignInForm';
 import { SignInAction } from '../../redux/actions';
+import { isAuthenticated } from '../../utils/auth';
 
 const signInValidationSchema = yup.object({
     username: yup.string().required('Username is required'),
@@ -35,15 +36,22 @@ const useStyles = makeStyles((theme: Theme) =>
 const SingInPage: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const initialValues = {
         username: '',
         password: ''
-    }
+    };
 
     const handleSubmit = (data: any) => {
         dispatch(SignInAction(data));
-    }
+    };
+
+    useEffect(() => {
+        if(isAuthenticated()) {
+            history.push('/dashboard');
+        };
+    }, [history]);
 
     return (
         <Container maxWidth='md'>
