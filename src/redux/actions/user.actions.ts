@@ -1,4 +1,9 @@
-import { USER_LOGIN_REQUEST, USER_SIGN_UP_REQUEST, USER_SIGN_OUT } from '../constants'
+import {
+    USER_LOGIN_REQUEST,
+    USER_SIGN_UP_REQUEST,
+    USER_SIGN_OUT,
+    GET_ACTIVE_USERS_REQUEST
+} from '../constants'
 import { AuthData, SignUpData } from '../../interfaces'
 
 export const SignInAction = (payload: AuthData) => ({
@@ -14,3 +19,8 @@ export const SignUpAction = (payload: SignUpData) => ({
 export const SignOutAction = () => ({
     type: USER_SIGN_OUT
 })
+
+export const GetActiveUsers = () => ({
+    type: GET_ACTIVE_USERS_REQUEST
+})
+

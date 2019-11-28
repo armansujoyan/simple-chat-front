@@ -6,7 +6,9 @@ import {
     USER_SIGN_UP_ERROR,
     USER_SIGN_UP_SUCCESS,
     GET_USER_ERROR,
-    GET_USER_SUCCESS
+    GET_USER_SUCCESS,
+    GET_ACTIVE_USERS_ERROR,
+    GET_ACTIVE_USERS_SUCCESS
 } from '../constants';
 import { history } from '../../utils';
 import { AnyAction } from 'redux';
@@ -80,5 +82,26 @@ export function* getUserSaga(action: AnyAction) {
         }
     } catch(error) {
         yield put({ type: GET_USER_ERROR, payload: error.message });
+    }
+}
+
+export function* getActiveUsers(action: AnyAction) {
+    try {
+        const token = localStorage.getItem('token') || '';
+        const getActiveUsersReq = yield fetch(`${APIUrl}/user/actives`, {
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        const response = yield getActiveUsersReq.json()
+
+        if(response.status && response.status === 'error') {
+            yield put({ type: GET_ACTIVE_USERS_ERROR, error: response.error});
+        } else {
+            yield put({ type: GET_ACTIVE_USERS_SUCCESS, payload: response.users });
+        }
+    } catch (error) {
+        yield put({ type: GET_ACTIVE_USERS_ERROR, payload: error.message });
     }
 }

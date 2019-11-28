@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     Box,
@@ -10,7 +10,7 @@ import {
     Button
 } from '@material-ui/core'
 import { userSelector } from '../../redux/selectors';
-import { SignOutAction } from '../../redux/actions';
+import { SignOutAction, GetActiveUsers } from '../../redux/actions';
 import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,6 +43,10 @@ const DashboardPage: React.FC<any> = () => {
         localStorage.removeItem('token');
         history.push('/login');
     }
+
+    useEffect(() => {
+        dispatch(GetActiveUsers());
+    }, [dispatch])
 
     return (
         <Box className={classes.wrapper} component='div' display='flex' flexDirection='column'>
