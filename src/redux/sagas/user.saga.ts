@@ -4,7 +4,9 @@ import {
     USER_LOGIN_ERROR,
     USER_LOGIN_SUCCESS,
     USER_SIGN_UP_ERROR,
-    USER_SIGN_UP_SUCCESS
+    USER_SIGN_UP_SUCCESS,
+    GET_USER_ERROR,
+    GET_USER_SUCCESS
 } from '../constants';
 import { history } from '../../utils';
 import { AnyAction } from 'redux';
@@ -36,10 +38,10 @@ export function* userLoginSaga(action: AnyAction) {
 
 export function* userSignUpSaga(action: AnyAction) {
     try {
-        const { payload } = action;
+        const { payload: credentials } = action;
         const signUpReq = yield fetch(`${APIUrl}/user/signup`, {
             method: 'POST',
-            body: JSON.stringify(payload),
+            body: JSON.stringify(credentials),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -56,5 +58,27 @@ export function* userSignUpSaga(action: AnyAction) {
         }
     } catch(error) {
         yield put({ type: USER_SIGN_UP_ERROR, payload: error.message });
+    }
+}
+
+export function* getUserSaga(action: AnyAction) {
+    try {
+        const { payload } = action;
+        const getUserReq = yield fetch(`${APIUrl}/user/${payload.uid}`, {
+            headers: {
+                'Authorization': payload.token
+            }
+        });
+
+        const response = yield getUserReq.json();
+
+        if(response.stats && response.status === 'error') {
+            localStorage.removeItem('token');
+            yield put({ type: GET_USER_ERROR, payload: response.message });
+        } else {
+            yield put({ type: GET_USER_SUCCESS, payload: response });
+        }
+    } catch(error) {
+        yield put({ type: GET_USER_ERROR, payload: error.message });
     }
 }
