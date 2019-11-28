@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SingInPage: React.FC = () => {
     const classes = useStyles();
-    const userState = useSelector(userSelector);
     const dispatch = useDispatch();
 
     const initialValues = {

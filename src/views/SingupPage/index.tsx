@@ -9,9 +9,12 @@ import {
 } from '@material-ui/core';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 
 import SignUpForm from './SignUpForm';
+import { SignUpData } from '../../interfaces';
+import { SignUpAction } from '../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +32,7 @@ const signupValidationSchema = yup.object({
 
 const SingInPage: React.FC = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const initialValues = {
         username: '',
@@ -36,14 +40,23 @@ const SingInPage: React.FC = () => {
         password: ''
     }
 
+    const handleSubmit = (formData: SignUpData) => {
+        dispatch(SignUpAction(formData));
+    }
+
     return (
         <Container maxWidth='md'>
             <Box component='div' alignItems='cneter'>
+                <Typography align='center' component='div'>
+                    <Box fontSize='h4.fontSize'>
+                        Sign Up
+                    </Box>
+                </Typography>
                 <Formik
                     component={SignUpForm}
                     initialValues={initialValues}
                     validationSchema={signupValidationSchema}
-                    onSubmit={() => console.log('Submitting')}/>
+                    onSubmit={handleSubmit}/>
                 <Typography align='center' className={classes.text}>
                     Already have an account? <Link to='/'>Sign In</Link>
                 </Typography>
