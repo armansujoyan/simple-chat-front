@@ -36,7 +36,7 @@ const SingInPage: React.FC = () => {
     return (
         <Container maxWidth='md'>
             <Box component='div' alignItems='cneter'>
-                <form>
+                <form onClick={handleSubmit}>
                     <FormGroup>
                             <TextField
                                 id='username'
@@ -44,6 +44,7 @@ const SingInPage: React.FC = () => {
                                 label='Username'
                                 onChange={handleUsernameChange}
                                 value={username}
+                                fullWidth
                                 />
                             <TextField
                                 id='password'
@@ -52,8 +53,9 @@ const SingInPage: React.FC = () => {
                                 label='Password'
                                 onChange={handlePasswordChange}
                                 value={password}
+                                fullWidth
                             />
-                            <Button onClick={handleSubmit} color='primary'>
+                            <Button color='primary'>
                                 Login
                             </Button>
                     </FormGroup>
