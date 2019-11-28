@@ -56,7 +56,6 @@ const DashboardPage: React.FC<any> = () => {
 
     const signOut = (event: any) => {
         dispatch(SignOutAction());
-        dispatch(UserDisconnectedAction(user._id));
         socket.emit('DISCONNECT_USER', user._id);
         localStorage.removeItem('token');
         history.push('/login');
@@ -78,7 +77,10 @@ const DashboardPage: React.FC<any> = () => {
         socket.on('USER_DISCONNECTED', (userId: string) => {
             dispatch(UserDisconnectedAction(userId));
         })
-    }, [dispatch, user._id])
+        return () => {
+            socket.off();
+        }
+    }, [])
 
     return (
         <Box className={classes.wrapper} component='div' display='flex' flexDirection='column'>

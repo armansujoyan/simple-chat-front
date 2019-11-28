@@ -1,4 +1,4 @@
-import { GET_ACTIVE_USERS_SUCCESS, NEW_USER_JOIN, USER_DISONNECTED } from '../constants';
+import { GET_ACTIVE_USERS_SUCCESS, NEW_USER_JOIN, USER_DISONNECTED, USER_SIGN_OUT } from '../constants';
 
 const initialState: any[] = []
 
@@ -11,6 +11,8 @@ export default (state = initialState, action: any) => {
         return [ ...state, payload ];
     case USER_DISONNECTED:
         return state.filter(user => user._id !== payload);
+    case USER_SIGN_OUT:
+        return []
     default:
         return state
     }
