@@ -10,8 +10,9 @@ import {
     Box
 } from '@material-ui/core'
 import { useQuery } from '../../hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GetChatMessages } from '../../redux/actions/message.actions';
+import { messagesSelector } from '../../redux/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     listItem: {
         height: '5rem',
+        width: '100%',
+        margin: 0
     },
     emptyListText: {
         width: '100%'
@@ -43,6 +46,7 @@ const ChatPage: React.FC<any> = () => {
     const query = useQuery();
     const [message, setMessage] = useState<string>('');
     const dispatch = useDispatch();
+    const messages: any[] = useSelector(messagesSelector);
 
     const owner = query.get('owner');
     const reciever = query.get('reciever');
@@ -66,6 +70,20 @@ const ChatPage: React.FC<any> = () => {
             </Box>
             <Box flexGrow={14}>
                 <List className={classes.list}>
+                    {
+                        messages.length === 0 ?
+                        <ListItem>
+                            <Box display='flex' justifyContent='center' className={classes.listItem}>
+                                No messages to show
+                            </Box>
+                        </ListItem>
+                        :
+                        messages.map((item: any) => <ListItem>
+                            <Box component='div' display='flex' justifyContent='center'>
+                                item.message
+                            </Box>
+                        </ListItem>)
+                    }
                 </List>
             </Box>
             <Box flexGrow={1}
