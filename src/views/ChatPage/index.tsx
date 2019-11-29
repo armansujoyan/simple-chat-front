@@ -1,4 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import IO from 'socket.io-client';
 import {
     makeStyles,
     createStyles,
@@ -9,10 +11,11 @@ import {
     List,
     Box
 } from '@material-ui/core'
+
 import { useQuery } from '../../hooks';
-import { useDispatch, useSelector } from 'react-redux';
-import { GetChatMessages } from '../../redux/actions/message.actions';
-import { messagesSelector } from '../../redux/selectors';
+import { SocketUrl } from '../../config';
+import { messagesSelector, userSelector } from '../../redux/selectors';
+import { GetChatMessages, GetNewPrivateMessage } from '../../redux/actions/message.actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,7 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
         padding: 0,
-        overflowY: 'auto'
+        maxHeight: '50rem',
+        overflow: 'auto'
     },
     listItem: {
         height: '5rem',
@@ -41,21 +45,46 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+let socket: any;
+
 const ChatPage: React.FC<any> = () => {
     const classes = useStyles();
     const query = useQuery();
     const [message, setMessage] = useState<string>('');
     const dispatch = useDispatch();
     const messages: any[] = useSelector(messagesSelector);
+    const user: any = useSelector(userSelector);
 
     const owner = query.get('owner');
     const reciever = query.get('reciever');
 
     useEffect(() => {
         dispatch(GetChatMessages({ owner, reciever }));
+        socket = IO.connect(SocketUrl, { query: { token: localStorage.getItem('token') }});
+
+        socket.emit('NEW_USER_CONNECTION', user._id);
+
+        socket.on('NEW_PRIVATE_MESSAGE', (message: any) => {
+            dispatch(GetNewPrivateMessage(message));
+        })
     }, []);
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setMessage(event.target.value);
+    const sendMessage = (message: string) => {
+        socket.emit('SEND_PRIVATE_MESSAGE', {
+            owner,
+            reciever,
+            message
+        });
+    }
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setMessage(event.target.value)
+
+    const handleKeyDown = (event: any) => {
+        if(event.key === 'Enter') {
+            sendMessage(message);
+            setMessage('');
+        }
+    }
 
     return (
         <Box className={classes.wrapper} component='div' display='flex' flexDirection='column'>
@@ -78,9 +107,16 @@ const ChatPage: React.FC<any> = () => {
                             </Box>
                         </ListItem>
                         :
-                        messages.map((item: any) => <ListItem>
-                            <Box component='div' display='flex' justifyContent='center'>
-                                item.message
+                        messages.map((item: any) => <ListItem key={item._id}>
+                            <Box component='div'
+                                className={classes.emptyListText}
+                                display='flex'
+                                justifyContent={
+                                item.owner === user._id ? 'flex-start' : 'flex-end'
+                            }>
+                                <p>
+                                    { item.message }
+                                </p>
                             </Box>
                         </ListItem>)
                     }
@@ -95,6 +131,7 @@ const ChatPage: React.FC<any> = () => {
                     margin='normal'
                     label='Enter message'
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                     value={message}
                     fullWidth/>
             </Box>
