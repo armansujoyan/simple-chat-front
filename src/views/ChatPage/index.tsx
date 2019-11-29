@@ -57,6 +57,7 @@ const ChatPage: React.FC<any> = () => {
 
     const owner = query.get('owner');
     const reciever = query.get('reciever');
+    const chatName = query.get('chatName');
 
     useEffect(() => {
         dispatch(GetChatMessages({ owner, reciever }));
@@ -94,7 +95,7 @@ const ChatPage: React.FC<any> = () => {
                 alignItems='center'
                 display='flex'>
                 <Typography className={classes.topBarText} align='center'>
-                    A chat component
+                    { chatName }
                 </Typography>
             </Box>
             <Box flexGrow={14}>

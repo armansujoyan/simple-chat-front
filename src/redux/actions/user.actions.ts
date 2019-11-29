@@ -4,7 +4,8 @@ import {
     USER_SIGN_OUT,
     GET_ACTIVE_USERS_REQUEST,
     USER_DISONNECTED,
-    NEW_USER_JOIN
+    NEW_USER_JOIN,
+    CLEAR_ACTIVE_USERS
 } from '../constants'
 import { AuthData, SignUpData } from '../../interfaces'
 
@@ -35,6 +36,11 @@ export const UserDisconnectedAction = (payload: string) => ({
     type: USER_DISONNECTED,
     payload
 })
+
+export const ClearActiveUsers = () => ({
+    type: CLEAR_ACTIVE_USERS
+})
+
 
 
 

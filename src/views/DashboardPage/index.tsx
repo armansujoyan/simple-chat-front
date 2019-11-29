@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import { SocketUrl } from '../../config';
 import { userSelector, activeUsersSelector } from '../../redux/selectors';
-import { SignOutAction, GetActiveUsers, UserJoinAction, UserDisconnectedAction } from '../../redux/actions';
+import { SignOutAction,GetActiveUsers, UserJoinAction, UserDisconnectedAction, ClearActiveUsers } from '../../redux/actions';
 import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,7 +62,7 @@ const DashboardPage: React.FC<any> = () => {
     }
 
     const openChat = (toUser: any) => {
-        history.push(`/chat?owner=${user._id}&reciever=${toUser._id}`);
+        history.push(`/chat?owner=${user._id}&reciever=${toUser._id}&chatName=${toUser.username}`);
     }
 
     useEffect(() => {
@@ -74,6 +74,8 @@ const DashboardPage: React.FC<any> = () => {
 
         socket.emit('NEW_USER_CONNECTION', user._id);
 
+        console.log('here it is');
+
         socket.on('NEW_USER_JOINED', (user: any) => {
             dispatch(UserJoinAction(user));
         });
@@ -82,6 +84,7 @@ const DashboardPage: React.FC<any> = () => {
             dispatch(UserDisconnectedAction(userId));
         })
         return () => {
+            dispatch(ClearActiveUsers());
             socket.off();
         }
     }, [])
