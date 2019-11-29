@@ -9,8 +9,11 @@ import {
     ListItem,
     Theme,
     List,
-    Box
+    Box,
+    Button
 } from '@material-ui/core'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { Link } from 'react-router-dom';
 
 import { useQuery } from '../../hooks';
 import { SocketUrl } from '../../config';
@@ -27,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.primary.main
     },
     topBarText: {
-        color: 'white'
+        color: 'white',
+        paddingRight: '1rem'
     },
     list: {
         padding: 0,
@@ -41,6 +45,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     emptyListText: {
         width: '100%'
+    },
+    icon: {
+        color: 'white'
     }
   }),
 );
@@ -91,9 +98,12 @@ const ChatPage: React.FC<any> = () => {
         <Box className={classes.wrapper} component='div' display='flex' flexDirection='column'>
             <Box flexGrow={1}
                 className={classes.topBar}
-                justifyContent='center'
+                justifyContent='space-between'
                 alignItems='center'
                 display='flex'>
+                <Button component={Link} to='/dashboard'>
+                    <ArrowBackIosIcon className={classes.icon}/>
+                </Button>
                 <Typography className={classes.topBarText} align='center'>
                     { chatName }
                 </Typography>
