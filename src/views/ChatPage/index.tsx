@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '../../hooks';
 import { SocketUrl } from '../../config';
 import { messagesSelector, userSelector } from '../../redux/selectors';
-import { GetChatMessages, GetNewPrivateMessage } from '../../redux/actions/message.actions';
+import { GetChatMessages, GetNewPrivateMessage, ClearMessages } from '../../redux/actions/message.actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,6 +75,9 @@ const ChatPage: React.FC<any> = () => {
         socket.on('NEW_PRIVATE_MESSAGE', (message: any) => {
             dispatch(GetNewPrivateMessage(message));
         })
+        return () => {
+            dispatch(ClearMessages());
+        }
     }, []);
 
     const sendMessage = (message: string) => {
