@@ -1,13 +1,15 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Box, makeStyles, createStyles, Theme, Snackbar } from '@material-ui/core';
+
+import { HideSnackbar } from '../../redux/actions';
 import DashboardPage from '../../views/DashboardPage';
 import SignInPage from '../../views/SignInPage';
 import SignUpPage from '../../views/SingupPage';
 import ChatPage from '../../views/ChatPage';
 import PrivateRoute from '../PrivateRoute';
-import { useSelector } from 'react-redux';
-import { snackbarSelector } from '../../redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { snackbarSelector, userSelector } from '../../redux/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,14 +21,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Root: React.FC = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const showSnackbar = useSelector(snackbarSelector);
+    const error = useSelector(userSelector).error;
+
+    const onSnackbarClose = () => dispatch(HideSnackbar());
 
     return (
         <Box className={classes.container} alignItems='center' display='flex'>
                 <Snackbar
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                   open={showSnackbar}
-                  message={<span id="message-id">I love snacks</span>}
+                  autoHideDuration={3000}
+                  onClose={onSnackbarClose}
+                  message={<span id="message-id">{error}</span>}
             />
             <Switch>
                 <Route path='/' exact>

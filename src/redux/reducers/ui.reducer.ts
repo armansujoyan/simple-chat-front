@@ -10,7 +10,7 @@ export default (state = initialState, action: any) => {
     case SHOW_SNACKBAR:
         return { ...state, showErrorSnack: true }
     case HIDE_SNACKBAR:
-        return {...state, showErrorSnack: true }
+        return {...state, showErrorSnack: false }
     default:
         return state
     }

@@ -6,7 +6,8 @@ import {
     USER_SIGN_UP_ERROR,
     USER_SIGN_UP_SUCCESS,
     GET_ACTIVE_USERS_ERROR,
-    GET_ACTIVE_USERS_SUCCESS
+    GET_ACTIVE_USERS_SUCCESS,
+    SHOW_SNACKBAR
 } from '../constants';
 import { history } from '../../utils';
 import { AnyAction } from 'redux';
@@ -26,6 +27,7 @@ export function* userLoginSaga(action: AnyAction) {
 
         if(response.status && response.status === 'error') {
             yield put({ type: USER_LOGIN_ERROR, payload: response.message });
+            yield put({ type: SHOW_SNACKBAR });
         } else {
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
@@ -34,6 +36,7 @@ export function* userLoginSaga(action: AnyAction) {
         }
     } catch (error) {
         yield put({ type: USER_LOGIN_ERROR, payload: error.message });
+        yield put({ type: SHOW_SNACKBAR });
     }
 }
 
@@ -52,6 +55,7 @@ export function* userSignUpSaga(action: AnyAction) {
 
         if(response.status && response.status === 'error') {
             yield put({ type: USER_SIGN_UP_ERROR, payload: response.message });
+            yield put({ type: SHOW_SNACKBAR });
         } else {
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
@@ -60,6 +64,7 @@ export function* userSignUpSaga(action: AnyAction) {
         }
     } catch(error) {
         yield put({ type: USER_SIGN_UP_ERROR, payload: error.message });
+        yield put({ type: SHOW_SNACKBAR });
     }
 }
 
