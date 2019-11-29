@@ -74,8 +74,6 @@ const DashboardPage: React.FC<any> = () => {
 
         socket.emit('NEW_USER_CONNECTION', user._id);
 
-        console.log('here it is');
-
         socket.on('NEW_USER_JOINED', (user: any) => {
             dispatch(UserJoinAction(user));
         });

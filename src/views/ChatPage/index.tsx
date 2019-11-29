@@ -113,7 +113,7 @@ const ChatPage: React.FC<any> = () => {
                                 className={classes.emptyListText}
                                 display='flex'
                                 justifyContent={
-                                item.owner === user._id ? 'flex-start' : 'flex-end'
+                                item.owner === user._id ? 'flex-end' : 'flex-start'
                             }>
                                 <p>
                                     { item.message }
